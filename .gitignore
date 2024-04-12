@@ -1,0 +1,10 @@
+data/processed/* 
+data/raw/* 
+config/*
+.env
+*.pyc
+
+!data/.gitkeep
+!data/processed/.gitkeep
+!data/raw/.gitkeep
+!config/.gitkeep
