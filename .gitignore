@@ -1,8 +1,12 @@
 data/processed/* 
 data/raw/* 
 config/*
+venv/*
 .env
 *.pyc
+
+.vscode/
+.github/
 
 !data/.gitkeep
 !data/processed/.gitkeep
