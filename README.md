@@ -28,9 +28,20 @@ Change directory into the project:
 ```bash 
 cd Gmail-Analysis
 ```
+Create and activate a virtual environment:
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
 Install the required dependencies:
 ```bash 
 pip install -r requirements.txt
+```
+
+**Important:** Always activate the virtual environment before running any scripts:
+```bash
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
 ## Gmail API Setup
@@ -44,10 +55,17 @@ Before using the tool, you need to configure your Gmail API credentials:
 
 ## Authentication
 
-To authenticate with the Gmail API, you will need to use the `quickstart.py` script. Provide the script with the paths to your `token_path` and `credentials_path`:
+To authenticate with the Gmail API, you will need to use the `quickstart.py` script. **Make sure to activate your virtual environment first**, then provide the script with the paths to your `token_path` and `credentials_path`:
 
 ```bash
+source venv/bin/activate  # Activate virtual environment first
 python quickstart.py --token_path <path/to/your/credentials.json> <path/to/your/token.json>
+```
+
+Or use the default paths:
+```bash
+source venv/bin/activate  # Activate virtual environment first
+python quickstart.py
 ```
 This command initializes the authentication process and stores the necessary tokens for API access.
 
