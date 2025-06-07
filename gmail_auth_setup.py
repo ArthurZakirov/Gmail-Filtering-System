@@ -1,25 +1,19 @@
 import os.path
-import urllib
 import argparse
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 
-# If modifying these scopes, delete the file token.json.
-#SCOPES_ROOT = "https://www.googleapis.com"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--token_path", default="config/token.json")
 parser.add_argument("--credentials_path", default="config/credentials.json")
-parser.add_argument("--scopes", nargs="+", default=["https://www.googleapis.com/auth/gmail.modify"])
+parser.add_argument("--scopes", nargs="+", default=["https://www.googleapis.com/auth/gmail.readonly"])
 args = parser.parse_args()
 
 
-
-def main(args):
+def authorize_gmail_access(args):
   """Shows basic usage of the Gmail API.
   Lists the user's Gmail labels.
   """
@@ -28,12 +22,8 @@ def main(args):
   SCOPES = args.scopes
   
   creds = None
-  # The file token.json stores the user's access and refresh tokens, and is
-  # created automatically when the authorization flow completes for the first
-  # time.
   if os.path.exists(token_path):
     creds = Credentials.from_authorized_user_file(token_path, SCOPES)
-  # If there are no (valid) credentials available, let the user log in.
   if not creds or not creds.valid:
     if creds and creds.expired and creds.refresh_token:
       creds.refresh(Request())
@@ -41,11 +31,18 @@ def main(args):
       flow = InstalledAppFlow.from_client_secrets_file(
           credentials_path, SCOPES
       )
-      creds = flow.run_local_server(port=0)
-    # Save the credentials for the next run
+      flow.redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
+
+      auth_url, _ = flow.authorization_url(prompt='consent')
+
+      print("Go to this URL to authorize the app:", auth_url)
+      code = input("Enter the authorization code: ")
+      flow.fetch_token(code=code)
+
+      creds = flow.credentials
     with open(token_path, "w") as token:
       token.write(creds.to_json())
 
 
 if __name__ == "__main__":
-  main(args)
+  authorize_gmail_access(args)
