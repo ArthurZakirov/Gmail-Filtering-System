@@ -2,7 +2,6 @@
 Gmail Filtering System - Main package.
 """
 
-from . import filters
-from . import data
+from . import data, filters
 
-__all__ = ['filters', 'data']
+__all__ = ["filters", "data"]

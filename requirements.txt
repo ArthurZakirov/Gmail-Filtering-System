@@ -7,3 +7,7 @@ tqdm
 pytest
 pytest-mock
 pytest-cov
+pre-commit
+black
+isort
+flake8

@@ -6,24 +6,25 @@ particularly for identifying application-related emails.
 """
 
 import re
+
 import pandas as pd
 
 
-def get_application_related_rows(
-    df, 
-    columns=["Subject", "Body"], 
+def extract_job_application_rows(
+    df,
+    columns=["Subject", "Body"],
     keywords=["application", "bewerbung"],
-    exclude_keywords=["github"]
+    exclude_keywords=["github"],
 ):
     """
     Filter DataFrame to get application-related rows.
-    
+
     Args:
         df (pd.DataFrame): The DataFrame containing email data
         columns (list): List of column names to search in (default: ["Subject", "Body"])
         keywords (list): Keywords to search for (default: ["application", "bewerbung"])
         exclude_keywords (list): Keywords to exclude (default: ["github"])
-    
+
     Returns:
         pd.DataFrame: Filtered DataFrame containing only application-related rows
                      that don't contain exclude keywords
@@ -36,10 +37,18 @@ def get_application_related_rows(
 
     for col in columns:
         if col in df.columns:
-            match = df[col].astype(str).str.contains(pattern, case=False, regex=True, na=False)
+            match = (
+                df[col]
+                .astype(str)
+                .str.contains(pattern, case=False, regex=True, na=False)
+            )
             combined_filter |= match
 
-            exclude = df[col].astype(str).str.contains(exclude_pattern, case=False, regex=True, na=False)
+            exclude = (
+                df[col]
+                .astype(str)
+                .str.contains(exclude_pattern, case=False, regex=True, na=False)
+            )
             exclude_filter |= exclude
 
     final_filter = combined_filter & (~exclude_filter)

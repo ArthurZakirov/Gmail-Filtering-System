@@ -2,20 +2,21 @@
 Pytest configuration and shared fixtures
 """
 
-import pytest
-import sys
 import os
+import sys
 import tempfile
 from unittest.mock import Mock
 
+import pytest
+
 # Add the project root to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 
 @pytest.fixture
 def temp_file():
     """Create a temporary file for testing"""
-    with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="w+", delete=False) as f:
         yield f.name
     os.unlink(f.name)
 
@@ -31,20 +32,21 @@ def temp_dir():
 def mock_gmail_service():
     """Create a mock Gmail service for testing"""
     service = Mock()
-    service.users.return_value.messages.return_value.list.return_value.execute.return_value = {
-        'messages': [{'id': 'test_message_id'}],
-        'resultSizeEstimate': 1
+    messages_mock = service.users.return_value.messages.return_value
+    messages_mock.list.return_value.execute.return_value = {
+        "messages": [{"id": "test_message_id"}],
+        "resultSizeEstimate": 1,
     }
-    service.users.return_value.messages.return_value.get.return_value.execute.return_value = {
-        'id': 'test_message_id',
-        'payload': {
-            'headers': [
-                {'name': 'From', 'value': 'test@example.com'},
-                {'name': 'Subject', 'value': 'Test Subject'},
-                {'name': 'Date', 'value': 'Mon, 1 Jan 2025 12:00:00 +0000'}
+    messages_mock.get.return_value.execute.return_value = {
+        "id": "test_message_id",
+        "payload": {
+            "headers": [
+                {"name": "From", "value": "test@example.com"},
+                {"name": "Subject", "value": "Test Subject"},
+                {"name": "Date", "value": "Mon, 1 Jan 2025 12:00:00 +0000"},
             ]
         },
-        'labelIds': ['INBOX']
+        "labelIds": ["INBOX"],
     }
     return service
 
@@ -56,7 +58,7 @@ def sample_credentials():
         "client_id": "test_client_id",
         "client_secret": "test_client_secret",
         "refresh_token": "test_refresh_token",
-        "token": "test_token"
+        "token": "test_token",
     }
 
 
