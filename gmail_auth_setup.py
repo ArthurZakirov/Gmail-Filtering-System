@@ -10,7 +10,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--token_path", default="config/token.json")
 parser.add_argument("--credentials_path", default="config/credentials.json")
 parser.add_argument("--scopes", nargs="+", default=["https://www.googleapis.com/auth/gmail.readonly"])
-args = parser.parse_args()
+
+def parse_arguments():
+    """Parse command line arguments."""
+    return parser.parse_args()
 
 
 def authorize_gmail_access(args):
@@ -44,5 +47,8 @@ def authorize_gmail_access(args):
       token.write(creds.to_json())
 
 
+args = None
+
 if __name__ == "__main__":
+  args = parse_arguments()
   authorize_gmail_access(args)
